@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(MainActivity.class.getCanonicalName(),"Hello");
 
-                Navigator.navigateFromMainActivityToShopListActivity(null);
                 Navigator.navigateFromMainActivityToShopListActivity(MainActivity.this);
             }
         });
