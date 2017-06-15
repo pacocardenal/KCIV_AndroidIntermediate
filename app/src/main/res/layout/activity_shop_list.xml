@@ -10,4 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="io.keepcoding.madridshops.activities.ShopListActivity">
 
+    <fragment
+        android:id="@+id/activity_shop_list__fragment_shops"
+        android:name="io.keepcoding.madridshops.fragments.ShopsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_shops">
+
+    </fragment>
+
 </RelativeLayout>

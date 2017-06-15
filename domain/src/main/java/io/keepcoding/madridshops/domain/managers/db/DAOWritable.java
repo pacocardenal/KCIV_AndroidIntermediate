@@ -9,4 +9,5 @@ public interface DAOWritable<T> {
     long delete(final long id);
     long delete(T element);
     void deleteAll();
+    long delete(String where, String... whereClause);
 }
