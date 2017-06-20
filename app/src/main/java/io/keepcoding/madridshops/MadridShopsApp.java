@@ -16,7 +16,7 @@ public class MadridShopsApp extends MultiDexApplication {
 
         // init app
 
-        Log.d(APP_NAME, "App starting");
+        Log.d(APP_NAME, "App starting " + BuildConfig.BASE_URL);
 
         // Picasso.with(getApplicationContext()).setLoggingEnabled(true);
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(true);

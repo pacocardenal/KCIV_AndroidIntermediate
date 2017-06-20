@@ -1,10 +1,22 @@
 package io.keepcoding.madridshops.domain.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class Shops implements ShopsIterable, ShopsUpdatable {
     private List<Shop> shops;
+
+    public static Shops from(@NonNull final List<Shop> shopList) {
+        final Shops shops = new Shops();
+
+        for (final Shop shop : shopList) {
+            shops.add(shop);
+        }
+
+        return shops;
+    }
 
     public Shops() {
     }
