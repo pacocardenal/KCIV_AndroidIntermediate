@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import io.keepcoding.madridshops.activities.MainActivity;
 import io.keepcoding.madridshops.activities.ShopDetailActivity;
 import io.keepcoding.madridshops.activities.ShopListActivity;
-import io.keepcoding.madridshops.activities.ActivitiesListActivity;
+import io.keepcoding.madridshops.activities.ActivityListActivity;
 import io.keepcoding.madridshops.domain.model.Shop;
 
 import static io.keepcoding.madridshops.util.Constants.INTENT_SHOP_DETAIL;
@@ -24,7 +24,7 @@ public class Navigator {
     public static Intent navigateFromMainActivityToActivitiesListActivity(@NonNull final MainActivity mainActivity) {
         assert(mainActivity != null);
 
-        final Intent i = new Intent(mainActivity, ActivitiesListActivity.class);
+        final Intent i = new Intent(mainActivity, ActivityListActivity.class);
         mainActivity.startActivity(i);
 
         return i;

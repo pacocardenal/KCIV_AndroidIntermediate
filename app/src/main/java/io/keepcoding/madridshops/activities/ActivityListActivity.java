@@ -4,8 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.keepcoding.madridshops.R;
+import io.keepcoding.madridshops.domain.model.Activity;
 
-public class ActivitiesListActivity extends AppCompatActivity {
+public class ActivityListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
