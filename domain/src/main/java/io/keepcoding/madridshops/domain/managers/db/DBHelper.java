@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // if API LEVEL > 16
         db.setForeignKeyConstraintsEnabled(true);
 
-        // db.execSQL("PRAGMA foreing_keys = ON");
+        // db.execSQL("PRAGMA foreign_keys = ON");
     }
 
     @Override
