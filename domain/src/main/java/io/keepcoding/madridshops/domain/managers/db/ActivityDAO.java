@@ -2,22 +2,27 @@ package io.keepcoding.madridshops.domain.managers.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.keepcoding.madridshops.domain.model.Activity;
 
+import static io.keepcoding.madridshops.domain.managers.db.DBConstants.ALL_ACTIVITY_COLUMNS;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_ADDRESS;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_DESCRIPTION;
+import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_ID;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_IMAGE_URL;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_LATITUDE;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_LOGO_IMAGE_URL;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_LONGITUDE;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_NAME;
 import static io.keepcoding.madridshops.domain.managers.db.DBConstants.KEY_ACTIVITY_URL;
+import static io.keepcoding.madridshops.domain.managers.db.DBConstants.TABLE_ACTIVITY;
 
 public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity> {
 
@@ -35,19 +40,64 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
     }
 
     @Override
-    public Activity query(long id) {
-        return null;
+    public @Nullable Activity query(long id) {
+        String idAsString = String.format("%d", id);
+        List<Activity> activities = query(KEY_ACTIVITY_ID + " = ?" + id, new String[]{ idAsString }, KEY_ACTIVITY_ID);
+
+        if (activities == null || activities.size() == 0) {
+            return  null;
+        }
+
+        return activities.get(0);
     }
 
     @Override
-    public List<Activity> query() {
-        return null;
+    public @Nullable List<Activity> query() {
+        return query(null, null, KEY_ACTIVITY_ID);
     }
 
     @Nullable
     @Override
     public List<Activity> query(String where, String[] whereArgs, String orderBy) {
-        return null;
+
+        Cursor c = dbReadConnection.query(TABLE_ACTIVITY,   // table name
+                ALL_ACTIVITY_COLUMNS,                       // columns I want to obtain
+                where,                                      // where
+                whereArgs,                                  // where args
+                orderBy,                                    // order by
+                null,                                       // group
+                null);                                      // having
+
+        if (c == null || c.getCount() == 0) {
+            return null;
+        }
+
+        List<Activity> activityList = new ArrayList<>();
+
+        while (c.moveToNext()) {
+            long id = c.getLong(c.getColumnIndex(KEY_ACTIVITY_ID));
+            String name = c.getString(c.getColumnIndex(KEY_ACTIVITY_NAME));
+            String address = c.getString(c.getColumnIndex(KEY_ACTIVITY_ADDRESS));
+            String description = c.getString(c.getColumnIndex(KEY_ACTIVITY_DESCRIPTION));
+            String imageUrl = c.getString(c.getColumnIndex(KEY_ACTIVITY_IMAGE_URL));
+            String logoImageUrl = c.getString(c.getColumnIndex(KEY_ACTIVITY_LOGO_IMAGE_URL));
+            String url = c.getString(c.getColumnIndex(KEY_ACTIVITY_URL));
+            float latitude = c.getString(c.getColumnIndex(KEY_ACTIVITY_LATITUDE));
+            float longitude = c.getString(c.getColumnIndex(KEY_ACTIVITY_LONGITUDE);
+
+            Activity activity = Activity.of(id, name)
+                    .setAddress(address)
+                    .setDescription(description)
+                    .setImageUrl(imageUrl)
+                    .setLogoUrl(logoImageUrl)
+                    .setLatitude(latitude)
+                    .setLongitude(longitude)
+                    .setUrl(url);
+
+            activityList.add(activity);
+        }
+
+        return activityList;
     }
 
     @Override
