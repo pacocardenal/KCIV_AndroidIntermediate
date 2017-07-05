@@ -2,9 +2,11 @@ package io.keepcoding.madridshops.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.adapters.ActivitiesAdapter;
 import io.keepcoding.madridshops.domain.model.Activities;
+import io.keepcoding.madridshops.domain.model.Activity;
+import io.keepcoding.madridshops.views.OnElementClick;
 
 public class ActivitiesFragment extends Fragment {
 
@@ -40,6 +44,13 @@ public class ActivitiesFragment extends Fragment {
 
         adapter = new ActivitiesAdapter(activities, getActivity());
         activitiesRecyclerView.setAdapter(adapter);
+
+        adapter.setOnClickListener(new OnElementClick<Activity>() {
+            @Override
+            public void clickedOn(@NonNull Activity activity, int position) {
+                Log.d("Click ", activity.getName());
+            }
+        });
     }
 
 }

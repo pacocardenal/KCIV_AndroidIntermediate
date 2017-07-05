@@ -10,10 +10,12 @@ import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.domain.model.Activity;
 import io.keepcoding.madridshops.views.ActivityRowViewHolder;
+import io.keepcoding.madridshops.views.OnElementClick;
 
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivityRowViewHolder> {
     private Activities activities;
     private LayoutInflater inflater;
+    private OnElementClick<Activity> listener;
 
     public ActivitiesAdapter(final Activities activities, final Context context) {
         this.activities = activities;
@@ -29,9 +31,18 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivityRowViewHolde
     }
 
     @Override
-    public void onBindViewHolder(ActivityRowViewHolder activityRow, int position) {
-        Activity activity = this.activities.get(position);
+    public void onBindViewHolder(ActivityRowViewHolder activityRow, final int position) {
+        final Activity activity = this.activities.get(position);
         activityRow.setActivity(activity);
+
+        activityRow.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.clickedOn(activity, position);
+                }
+            }
+        });
     }
 
     @Override
@@ -40,5 +51,9 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivityRowViewHolde
             return (int) this.activities.size();
         }
         return 0;
+    }
+
+    public void setOnClickListener(OnElementClick<Activity> listener) {
+        this.listener = listener;
     }
 }
