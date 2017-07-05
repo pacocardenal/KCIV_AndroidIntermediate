@@ -102,7 +102,9 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
 
     @Override
     public int numRecords() {
-        return 0;
+        List<Activity> activityList = query();
+
+        return activityList == null ? 0 : activityList.size();
     }
 
     @Override
@@ -177,4 +179,5 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
         }
         return deletedRegs;
     }
+
 }
