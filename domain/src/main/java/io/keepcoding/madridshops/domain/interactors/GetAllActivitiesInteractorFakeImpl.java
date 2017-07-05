@@ -13,7 +13,8 @@ public class GetAllActivitiesInteractorFakeImpl implements GetAllActivitiesInter
         Activities activities = new Activities();
 
         for (int i = 0; i < 10; i++) {
-            Activity activity = Activity.of(i, "My shop " + i);
+            Activity activity = Activity.of(i, "My activity " + i)
+                    .setLogoUrl("http://kidsactivitiesblog.com/wp-content/uploads/2015/10/logo.png");
             activities.add(activity);
         }
 
