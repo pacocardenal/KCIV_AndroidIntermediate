@@ -52,13 +52,13 @@ public class ActivitiesUnitTests {
         Activities sut = new Activities();
 
         for (int i = 0; i < 10; i++) {
-            Activity activity = Activity.of(i, "My shop " + i);
+            Activity activity = Activity.of(i, "My activity " + i);
             sut.add(activity);
         }
 
         assertEquals(10, sut.size());
         assertEquals(10, sut.allActivities().size());
         assertEquals(0, sut.allActivities().get(0).getId());
-        assertEquals("My shop 0", sut.allActivities().get(0).getName());
+        assertEquals("My activity 0", sut.allActivities().get(0).getName());
     }
 }

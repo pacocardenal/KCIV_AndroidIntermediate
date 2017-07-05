@@ -26,7 +26,7 @@ import static io.keepcoding.madridshops.domain.managers.db.DBConstants.TABLE_ACT
 
 public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity> {
 
-    private static final long EMPTY_SHOP = 0;
+    private static final long EMPTY_ACTIVITY = 0;
     private SQLiteDatabase dbReadConnection;
     private SQLiteDatabase dbWriteConnection;
 
@@ -110,7 +110,7 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
     @Override
     public long insert(@NonNull Activity element) {
         if (element == null) {
-            return EMPTY_SHOP;
+            return EMPTY_ACTIVITY;
         }
 
         dbWriteConnection.beginTransaction();

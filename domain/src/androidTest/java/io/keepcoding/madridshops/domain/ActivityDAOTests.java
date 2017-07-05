@@ -90,7 +90,7 @@ public class ActivityDAOTests {
 
         ActivityDAO sut = new ActivityDAO(appContext);
         for (int i = 0; i <10; i++) {
-            insertActivity(sut, i, "Shop " + i, "Address " + i, i + 1, i);
+            insertActivity(sut, i, "Activity " + i, "Address " + i, i + 1, i);
         }
     }
 }

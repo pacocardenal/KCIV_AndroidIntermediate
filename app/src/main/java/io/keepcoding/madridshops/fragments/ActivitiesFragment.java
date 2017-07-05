@@ -3,25 +3,43 @@ package io.keepcoding.madridshops.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import io.keepcoding.madridshops.R;
+import io.keepcoding.madridshops.adapters.ActivitiesAdapter;
+import io.keepcoding.madridshops.domain.model.Activities;
 
 public class ActivitiesFragment extends Fragment {
 
+    private RecyclerView activitiesRecyclerView;
+    private ActivitiesAdapter adapter;
+    private Activities activities;
 
     public ActivitiesFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_activities, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_activities, container, false);
+
+        activitiesRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_activities__recycler_view);
+        activitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        return view;
+    }
+
+    public void setActivities(Activities activities) {
+        this.activities = activities;
+
+        adapter = new ActivitiesAdapter(activities, getActivity());
+        activitiesRecyclerView.setAdapter(adapter);
     }
 
 }
