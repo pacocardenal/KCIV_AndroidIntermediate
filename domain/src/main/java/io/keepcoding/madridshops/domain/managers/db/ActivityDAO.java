@@ -42,7 +42,7 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
     @Override
     public @Nullable Activity query(long id) {
         String idAsString = String.format("%d", id);
-        List<Activity> activities = query(KEY_ACTIVITY_ID + " = ?" + id, new String[]{ idAsString }, KEY_ACTIVITY_ID);
+        List<Activity> activities = query(KEY_ACTIVITY_ID + " = ?", new String[]{ idAsString }, KEY_ACTIVITY_ID);
 
         if (activities == null || activities.size() == 0) {
             return  null;
@@ -82,8 +82,8 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
             String imageUrl = c.getString(c.getColumnIndex(KEY_ACTIVITY_IMAGE_URL));
             String logoImageUrl = c.getString(c.getColumnIndex(KEY_ACTIVITY_LOGO_IMAGE_URL));
             String url = c.getString(c.getColumnIndex(KEY_ACTIVITY_URL));
-            float latitude = c.getString(c.getColumnIndex(KEY_ACTIVITY_LATITUDE));
-            float longitude = c.getString(c.getColumnIndex(KEY_ACTIVITY_LONGITUDE);
+            float latitude = c.getFloat(c.getColumnIndex(KEY_ACTIVITY_LATITUDE));
+            float longitude = c.getFloat(c.getColumnIndex(KEY_ACTIVITY_LONGITUDE));
 
             Activity activity = Activity.of(id, name)
                     .setAddress(address)
@@ -151,21 +151,30 @@ public class ActivityDAO implements DAOReadable<Activity>, DAOWritable<Activity>
 
     @Override
     public long delete(long id) {
-        return 0;
+        return delete(KEY_ACTIVITY_ID + " = ?", "" + id);
     }
 
     @Override
     public long delete(Activity element) {
-        return 0;
+        return delete(element.getId());
     }
 
     @Override
     public void deleteAll() {
-
+        delete(null, null);
     }
 
     @Override
     public long delete(String where, String... whereClause) {
-        return 0;
+        int deletedRegs = 0;
+        dbWriteConnection.beginTransaction();
+        try {
+            deletedRegs = dbWriteConnection.delete(TABLE_ACTIVITY, null, null);
+
+            dbWriteConnection.setTransactionSuccessful();
+        } finally {
+            dbWriteConnection.endTransaction();
+        }
+        return deletedRegs;
     }
 }
