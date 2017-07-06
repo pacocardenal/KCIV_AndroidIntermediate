@@ -8,8 +8,8 @@ public class ActivityEntity {
     @SerializedName("address") private String address;
     @SerializedName("description_es") private String description_es;
     @SerializedName("description_en") private String description_en;
-    @SerializedName("gps_lat") private float gps_lat;
-    @SerializedName("gps_lon") private float gps_lon;
+    @SerializedName("gps_lat") private String gps_lat;
+    @SerializedName("gps_lon") private String gps_lon;
     @SerializedName("img") private String img;
     @SerializedName("logo_img") private String logo_img;
     @SerializedName("url") private String url;
@@ -35,11 +35,11 @@ public class ActivityEntity {
         return description_en;
     }
 
-    public float getGps_lat() {
+    public String getGps_lat() {
         return gps_lat;
     }
 
-    public float getGps_lon() {
+    public String getGps_lon() {
         return gps_lon;
     }
 

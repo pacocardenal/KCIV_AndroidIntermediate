@@ -20,8 +20,8 @@ public class ActivityEntityIntoActivitiesMapper {
             Activity activity = Activity.of(activityEntity.getId(), activityEntity.getName());
 
             activity.setDescription(activityEntity.getDescription_es());
-            activity.setLatitude(activityEntity.getGps_lat());
-            activity.setLongitude(activityEntity.getGps_lon());
+            activity.setLatitude(ShopEntityIntoShopsMapper.getCorrectCoordinateComponent(activityEntity.getGps_lat()));
+            activity.setLongitude(ShopEntityIntoShopsMapper.getCorrectCoordinateComponent(activityEntity.getGps_lon()));
             activity.setAddress(activityEntity.getAddress());
             activity.setUrl(activityEntity.getUrl());
             activity.setImageUrl(activityEntity.getImg());
@@ -32,4 +32,5 @@ public class ActivityEntityIntoActivitiesMapper {
 
         return activities;
     }
+
 }
