@@ -12,8 +12,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import io.keepcoding.domain.R;
+import io.keepcoding.madridshops.domain.managers.network.entities.ActivityEntity;
+import io.keepcoding.madridshops.domain.managers.network.jsonparser.ActivitiesJsonParser;
 
 public class GetAllActivitiesManagerImpl implements ActivitiesNetworkManager {
 
@@ -24,7 +27,7 @@ public class GetAllActivitiesManagerImpl implements ActivitiesNetworkManager {
     }
 
     @Override
-    public void getActivitiesFromServer(@NonNull GetAllActivitiesManagerCompletion completion, @Nullable ManagerErrorCompletion errorCompletion) {
+    public void getActivitiesFromServer(@NonNull final GetAllActivitiesManagerCompletion completion, @Nullable final ManagerErrorCompletion errorCompletion) {
         String url = weakContext.get().getString(R.string.activities_url);
         RequestQueue queue = Volley.newRequestQueue(weakContext.get());
 
@@ -34,12 +37,22 @@ public class GetAllActivitiesManagerImpl implements ActivitiesNetworkManager {
                     @Override
                     public void onResponse(String response) {
                         Log.d("JSON", response);
+
+                        ActivitiesJsonParser parser = new ActivitiesJsonParser();
+                        List<ActivityEntity> activities = parser.parse(response);
+
+                        if (completion != null) {
+                            completion.completion(activities);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("JSON", error.toString());
+                        if (errorCompletion != null) {
+                            errorCompletion.onError(error.getMessage());
+                        }
                     }
                 }
         );

@@ -13,10 +13,12 @@ import android.util.Log;
 import com.squareup.picasso.Picasso;
 
 import io.keepcoding.madridshops.activities.ShopListActivity;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
 import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
-import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerCompletion;
 import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
-import io.keepcoding.madridshops.domain.managers.network.ManagerErrorCompletion;
 import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.services.ShopService;
 
@@ -31,12 +33,15 @@ public class MadridShopsApp extends MultiDexApplication {
 
         // TODO: quitar la aberración que sigue
         ActivitiesNetworkManager manager = new GetAllActivitiesManagerImpl(getApplicationContext());
-        manager.getActivitiesFromServer(new GetAllActivitiesManagerCompletion() {
+
+        GetAllActivitiesInteractor getAllActivitiesInteractor = new GetAllActivitiesInteractorImpl(manager);
+
+        getAllActivitiesInteractor.execute(new GetAllActivitiesInteractorCompletion() {
             @Override
             public void completion(@NonNull Activities activities) {
 
             }
-        }, new ManagerErrorCompletion() {
+        }, new InteractorErrorCompletion() {
             @Override
             public void onError(String errorDescription) {
 
