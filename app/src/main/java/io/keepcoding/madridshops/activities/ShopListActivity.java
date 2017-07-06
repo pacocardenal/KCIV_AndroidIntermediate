@@ -40,7 +40,7 @@ import io.keepcoding.madridshops.domain.managers.cache.GetAllShopsFromCacheManag
 import io.keepcoding.madridshops.domain.managers.cache.SaveAllShopsIntoCacheManager;
 import io.keepcoding.madridshops.domain.managers.cache.SaveAllShopsIntoCacheManagerDAOImpl;
 import io.keepcoding.madridshops.domain.managers.network.GetAllShopsManagerImpl;
-import io.keepcoding.madridshops.domain.managers.network.NetworkManager;
+import io.keepcoding.madridshops.domain.managers.network.ShopsNetworkManager;
 import io.keepcoding.madridshops.domain.model.Shop;
 import io.keepcoding.madridshops.domain.model.Shops;
 import io.keepcoding.madridshops.fragments.ShopsFragment;
@@ -161,7 +161,7 @@ public class ShopListActivity extends AppCompatActivity {
     private void obtainShopsList() {
         progressBar.setVisibility(View.VISIBLE);
 
-        NetworkManager manager = new GetAllShopsManagerImpl(this);
+        ShopsNetworkManager manager = new GetAllShopsManagerImpl(this);
         GetAllShopsInteractor getAllShopsInteractor = new GetAllShopsInteractorImpl(manager);
         getAllShopsInteractor.execute(
             new GetAllShopsInteractorCompletion() {

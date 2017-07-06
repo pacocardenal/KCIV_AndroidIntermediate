@@ -12,23 +12,20 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import io.keepcoding.domain.R;
-import io.keepcoding.madridshops.domain.managers.network.entities.ShopEntity;
-import io.keepcoding.madridshops.domain.managers.network.jsonparser.ShopsJsonParser;
 
-public class GetAllShopsManagerImpl implements ShopsNetworkManager {
+public class GetAllActivitiesManagerImpl implements ActivitiesNetworkManager {
 
     WeakReference<Context> weakContext;
 
-    public GetAllShopsManagerImpl(Context context) {
+    public GetAllActivitiesManagerImpl(Context context) {
         weakContext = new WeakReference<Context>(context);
     }
 
     @Override
-    public void getShopsFromServer(@NonNull final GetAllShopsManagerCompletion completion, @Nullable final ManagerErrorCompletion errorCompletion) {
-        String url = weakContext.get().getString(R.string.shops_url);
+    public void getActivitiesFromServer(@NonNull GetAllActivitiesManagerCompletion completion, @Nullable ManagerErrorCompletion errorCompletion) {
+        String url = weakContext.get().getString(R.string.activities_url);
         RequestQueue queue = Volley.newRequestQueue(weakContext.get());
 
         StringRequest request = new StringRequest(
@@ -37,25 +34,17 @@ public class GetAllShopsManagerImpl implements ShopsNetworkManager {
                     @Override
                     public void onResponse(String response) {
                         Log.d("JSON", response);
-
-                        ShopsJsonParser parser = new ShopsJsonParser();
-                        List<ShopEntity> entities = parser.parse(response);
-
-                        if (completion != null) {
-                            completion.completion(entities);
-                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("JSON", error.toString());
-                        if (errorCompletion != null) {
-                            errorCompletion.onError(error.getMessage());
-                        }
                     }
                 }
         );
+
         queue.add(request);
     }
+
 }

@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
@@ -12,6 +13,11 @@ import android.util.Log;
 import com.squareup.picasso.Picasso;
 
 import io.keepcoding.madridshops.activities.ShopListActivity;
+import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
+import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerCompletion;
+import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
+import io.keepcoding.madridshops.domain.managers.network.ManagerErrorCompletion;
+import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.services.ShopService;
 
 
@@ -22,6 +28,20 @@ public class MadridShopsApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // TODO: quitar la aberración que sigue
+        ActivitiesNetworkManager manager = new GetAllActivitiesManagerImpl(getApplicationContext());
+        manager.getActivitiesFromServer(new GetAllActivitiesManagerCompletion() {
+            @Override
+            public void completion(@NonNull Activities activities) {
+
+            }
+        }, new ManagerErrorCompletion() {
+            @Override
+            public void onError(String errorDescription) {
+
+            }
+        });
 
         // init app
 
