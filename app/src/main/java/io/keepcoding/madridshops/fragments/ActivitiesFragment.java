@@ -19,6 +19,8 @@ import io.keepcoding.madridshops.views.OnElementClick;
 
 public class ActivitiesFragment extends Fragment {
 
+    private OnElementClick<Activity> listener;
+
     private RecyclerView activitiesRecyclerView;
     private ActivitiesAdapter adapter;
     private Activities activities;
@@ -49,8 +51,15 @@ public class ActivitiesFragment extends Fragment {
             @Override
             public void clickedOn(@NonNull Activity activity, int position) {
                 Log.d("Click ", activity.getName());
+                if (listener != null) {
+                    listener.clickedOn(activity, position);
+                }
             }
         });
+    }
+
+    public void setOnElementClickListener(OnElementClick<Activity> listener) {
+        this.listener = listener;
     }
 
 }

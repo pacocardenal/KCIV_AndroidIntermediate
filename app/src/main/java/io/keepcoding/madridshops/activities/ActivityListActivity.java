@@ -1,6 +1,7 @@
 package io.keepcoding.madridshops.activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import io.keepcoding.madridshops.R;
@@ -11,7 +12,10 @@ import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
 import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
 import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
 import io.keepcoding.madridshops.domain.model.Activities;
+import io.keepcoding.madridshops.domain.model.Activity;
 import io.keepcoding.madridshops.fragments.ActivitiesFragment;
+import io.keepcoding.madridshops.navigator.Navigator;
+import io.keepcoding.madridshops.views.OnElementClick;
 
 public class ActivityListActivity extends AppCompatActivity {
 
@@ -33,6 +37,13 @@ public class ActivityListActivity extends AppCompatActivity {
                     public void completion(Activities activities) {
                         System.out.println("Hello hello");
                         activitiesFragment.setActivities(activities);
+                        activitiesFragment.setOnElementClickListener(new OnElementClick<Activity>() {
+                            @Override
+                            public void clickedOn(@NonNull Activity element, int position) {
+                                // TODO: finish
+                                Navigator.navigateFromActivityListActivityToActivityDetailActivity(ActivityListActivity.this, element, position);
+                            }
+                        });
                     }
                 },
                 new InteractorErrorCompletion() {

@@ -1,6 +1,8 @@
 package io.keepcoding.madridshops.domain.model;
 
-public class Activity {
+import java.io.Serializable;
+
+public class Activity implements Serializable {
     private long id;
     private String name;
     private String imageUrl;
