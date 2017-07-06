@@ -18,6 +18,14 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_activities"
         tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp"></fragment>
+        tools:layout_editor_absoluteX="8dp">
+    </fragment>
+
+    <ProgressBar
+        android:id="@+id/activity_activity_list__progress_bar"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
 </RelativeLayout>

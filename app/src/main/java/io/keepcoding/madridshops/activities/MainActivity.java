@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        launchInBackgroundThread();
+        //launchInBackgroundThread();
+        //testMultithread();
     }
 
     private void launchInBackgroundThread() {

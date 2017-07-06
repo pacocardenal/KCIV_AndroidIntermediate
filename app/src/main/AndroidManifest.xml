@@ -55,6 +55,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.ShopListActivity"/>
         </activity>
+        <activity
+            android:name=".activities.ActivityListActivity"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".activities.ActivityDetailActivity"
+            android:parentActivityName=".activities.ActivityListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ActivityListActivity"/>
+        </activity>
 
         <!-- Google maps -->
 
@@ -69,10 +83,6 @@
 
         <service android:name=".services.ShopService"/>
 
-        <activity android:name=".activities.ActivityListActivity">
-        </activity>
-        <activity android:name=".activities.ActivityDetailActivity">
-        </activity>
     </application>
 
 </manifest>
