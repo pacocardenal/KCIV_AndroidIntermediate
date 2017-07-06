@@ -13,12 +13,14 @@ import butterknife.ButterKnife;
 import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.domain.model.Activity;
 import io.keepcoding.madridshops.util.Constants;
+import io.keepcoding.madridshops.util.StaticMapImage;
 
 public class ActivityDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_activity_detail__activity_address) TextView address;
     @BindView(R.id.activity_activity_detail__activity_description) TextView description;
     @BindView(R.id.activity_activity_detail__activity_image) ImageView activityImage;
+    @BindView(R.id.activity_activity_detail__activity_map) ImageView mapImage;
     @BindView(R.id.activity_activity_detail__activity_name) TextView name;
 
     @Override
@@ -37,6 +39,13 @@ public class ActivityDetailActivity extends AppCompatActivity {
                     .load(activity.getImageUrl())
                     .placeholder(R.drawable.shop_placeholder)
                     .into(activityImage);
+
+            String staticMapUrl = StaticMapImage.getActivityMapImageUrl(activity);
+            Picasso.with(this)
+                    .load(staticMapUrl)
+                    .placeholder(R.drawable.map_placeholder)
+                    .into(mapImage);
+
         }
     }
 }
