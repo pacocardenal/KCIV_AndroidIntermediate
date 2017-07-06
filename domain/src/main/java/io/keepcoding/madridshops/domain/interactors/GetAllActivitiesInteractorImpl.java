@@ -10,6 +10,8 @@ import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManage
 import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerCompletion;
 import io.keepcoding.madridshops.domain.managers.network.ManagerErrorCompletion;
 import io.keepcoding.madridshops.domain.managers.network.entities.ActivityEntity;
+import io.keepcoding.madridshops.domain.managers.network.mappers.ActivityEntityIntoActivitiesMapper;
+import io.keepcoding.madridshops.domain.model.Activities;
 
 public class GetAllActivitiesInteractorImpl implements GetAllActivitiesInteractor {
 
@@ -20,7 +22,7 @@ public class GetAllActivitiesInteractorImpl implements GetAllActivitiesInteracto
     }
     
     @Override
-    public void execute(@NonNull GetAllActivitiesInteractorCompletion completion, @Nullable InteractorErrorCompletion onError) {
+    public void execute(@NonNull final GetAllActivitiesInteractorCompletion completion, @Nullable InteractorErrorCompletion onError) {
         if (this.networkManager == null) {
             if (onError == null) {
                 throw new IllegalStateException("Network manager can't be null");
@@ -32,6 +34,10 @@ public class GetAllActivitiesInteractorImpl implements GetAllActivitiesInteracto
             @Override
             public void completion(@NonNull List<ActivityEntity> activityEntities) {
                 Log.d("ACTIVITY", activityEntities.toString());
+                if (completion != null) {
+                    Activities activities = ActivityEntityIntoActivitiesMapper.map(activityEntities);
+                    completion.completion(activities);
+                }
             }
         }, new ManagerErrorCompletion() {
             @Override

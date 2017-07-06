@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
-import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorFakeImpl;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
+import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
+import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
 import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.fragments.ActivitiesFragment;
 
@@ -23,7 +25,8 @@ public class ActivityListActivity extends AppCompatActivity {
         activitiesFragment = (ActivitiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_activity_list__fragment_activities);
 
         // Obtain activities list
-        GetAllActivitiesInteractor getAllActivitiesInteractor = new GetAllActivitiesInteractorFakeImpl();
+        ActivitiesNetworkManager manager = new GetAllActivitiesManagerImpl(this);
+        GetAllActivitiesInteractor getAllActivitiesInteractor = new GetAllActivitiesInteractorImpl(manager);
         getAllActivitiesInteractor.execute(
                 new GetAllActivitiesInteractorCompletion() {
                     @Override

@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
@@ -13,13 +12,6 @@ import android.util.Log;
 import com.squareup.picasso.Picasso;
 
 import io.keepcoding.madridshops.activities.ShopListActivity;
-import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
-import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
-import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
-import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
-import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
-import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
-import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.services.ShopService;
 
 
@@ -30,23 +22,6 @@ public class MadridShopsApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // TODO: quitar la aberración que sigue
-        ActivitiesNetworkManager manager = new GetAllActivitiesManagerImpl(getApplicationContext());
-
-        GetAllActivitiesInteractor getAllActivitiesInteractor = new GetAllActivitiesInteractorImpl(manager);
-
-        getAllActivitiesInteractor.execute(new GetAllActivitiesInteractorCompletion() {
-            @Override
-            public void completion(@NonNull Activities activities) {
-
-            }
-        }, new InteractorErrorCompletion() {
-            @Override
-            public void onError(String errorDescription) {
-
-            }
-        });
 
         // init app
 
