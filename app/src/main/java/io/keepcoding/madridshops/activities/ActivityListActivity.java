@@ -11,12 +11,20 @@ import butterknife.ButterKnife;
 import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesAreCachedInteractor;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesAreCachedInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesFromCacheInteractor;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesFromCacheInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
+import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractor;
+import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractor;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractorImpl;
+import io.keepcoding.madridshops.domain.managers.cache.GetAllActivitiesFromCacheManager;
+import io.keepcoding.madridshops.domain.managers.cache.GetAllActivitiesFromCacheManagerDAOImpl;
+import io.keepcoding.madridshops.domain.managers.cache.SaveAllActivitiesIntoCacheManager;
+import io.keepcoding.madridshops.domain.managers.cache.SaveAllActivitiesIntoCacheManagerDAOImpl;
 import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
 import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
 import io.keepcoding.madridshops.domain.model.Activities;
@@ -44,14 +52,24 @@ public class ActivityListActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // all cached already, no need to download things, just read from DB
-                SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
-                setAllActivitiesAreCachedInteractor.execute(false);
+                readDataFromCache();
             }
         }, new Runnable() {
             @Override
             public void run() {
                 // nothing cached yet
                 obtainActivitiesList();
+            }
+        });
+    }
+
+    private void readDataFromCache() {
+        GetAllActivitiesFromCacheManager getAllActivitiesFromCacheManager = new GetAllActivitiesFromCacheManagerDAOImpl(this);
+        GetAllActivitiesFromCacheInteractor getAllActivitiesFromCacheInteractor = new GetAllActivitiesFromCacheInteractorImpl(getAllActivitiesFromCacheManager);
+        getAllActivitiesFromCacheInteractor.execute(new GetAllActivitiesInteractorCompletion() {
+            @Override
+            public void completion(@NonNull Activities activities) {
+                configActivitiesFragment(activities);
             }
         });
     }
@@ -65,21 +83,19 @@ public class ActivityListActivity extends AppCompatActivity {
                 new GetAllActivitiesInteractorCompletion() {
                     @Override
                     public void completion(Activities activities) {
-                        System.out.println("Hello hello");
-                        progressBar.setVisibility(View.INVISIBLE);
-
-                        // TODO: Persist in cache all shops
-
-                        SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
-                        setAllActivitiesAreCachedInteractor.execute(true);
-
-                        activitiesFragment.setActivities(activities);
-                        activitiesFragment.setOnElementClickListener(new OnElementClick<Activity>() {
+                        SaveAllActivitiesIntoCacheManager saveManager = new SaveAllActivitiesIntoCacheManagerDAOImpl(getBaseContext());
+                        SaveAllActivitiesIntoCacheInteractor saveInteractor = new SaveAllActivitiesIntoCacheInteractorImpl(saveManager);
+                        saveInteractor.execute(activities, new Runnable() {
                             @Override
-                            public void clickedOn(@NonNull Activity element, int position) {
-                                Navigator.navigateFromActivityListActivityToActivityDetailActivity(ActivityListActivity.this, element, position);
+                            public void run() {
+                                SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
+                                setAllActivitiesAreCachedInteractor.execute(true);
                             }
                         });
+
+                        configActivitiesFragment(activities);
+                        progressBar.setVisibility(View.INVISIBLE);
+
                     }
                 },
                 new InteractorErrorCompletion() {
@@ -89,5 +105,16 @@ public class ActivityListActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void configActivitiesFragment(final Activities activities) {
+        activitiesFragment.setActivities(activities);
+        activitiesFragment.setOnElementClickListener(new OnElementClick<Activity>() {
+            @Override
+            public void clickedOn(@NonNull Activity element, int position) {
+                // TODO: finish
+                Navigator.navigateFromActivityListActivityToActivityDetailActivity(ActivityListActivity.this, element, position);
+            }
+        });
     }
 }
