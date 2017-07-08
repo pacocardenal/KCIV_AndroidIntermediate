@@ -3,6 +3,7 @@ package io.keepcoding.madridshops.domain.managers.network.mappers;
 import android.util.Log;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.keepcoding.madridshops.domain.managers.network.entities.ShopEntity;
 import io.keepcoding.madridshops.domain.model.Shop;
@@ -21,7 +22,11 @@ public class ShopEntityIntoShopsMapper {
         for (ShopEntity shopEntity : shopEntities) {
             Shop shop = Shop.of(shopEntity.getId(), shopEntity.getName());
 
-            shop.setDescription(shopEntity.getDescription_es());
+            if (Locale.getDefault().getLanguage().equals("es")) {
+                shop.setDescription(shopEntity.getDescription_es());
+            } else {
+                shop.setDescription(shopEntity.getDescription_en());
+            }
             shop.setLatitude(getCorrectCoordinateComponent(shopEntity.getGps_lat()));
             shop.setLongitude(getCorrectCoordinateComponent(shopEntity.getGps_lon()));
             shop.setAddress(shopEntity.getAddress());
