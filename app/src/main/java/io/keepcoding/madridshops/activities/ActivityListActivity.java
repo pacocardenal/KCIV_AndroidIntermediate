@@ -5,6 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +38,14 @@ import io.keepcoding.madridshops.fragments.ActivitiesFragment;
 import io.keepcoding.madridshops.navigator.Navigator;
 import io.keepcoding.madridshops.views.OnElementClick;
 
+import static io.keepcoding.madridshops.util.map.MapUtil.centerMapInPosition;
+
 public class ActivityListActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_activity_list__progress_bar) ProgressBar progressBar;
 
     ActivitiesFragment activitiesFragment;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,29 @@ public class ActivityListActivity extends AppCompatActivity {
                 obtainActivitiesList();
             }
         });
+
+        initializeMap();
+    }
+
+    private void initializeMap() {
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.activity_activity_list__map);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                // check if map is created successfully or not
+                if (googleMap == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Sorry! unable to create maps", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    setupMap(googleMap);
+                }
+            }
+        });
+    }
+
+    public void setupMap(GoogleMap map) {
+        centerMapInPosition(map, 40.411335, -3.674908);
     }
 
     private void readDataFromCache() {
