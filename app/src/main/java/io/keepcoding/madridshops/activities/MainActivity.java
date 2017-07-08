@@ -1,10 +1,12 @@
 package io.keepcoding.madridshops.activities;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,20 +29,20 @@ import io.keepcoding.madridshops.domain.interactors.SetAllShopsAreCachedInteract
 import io.keepcoding.madridshops.domain.managers.cache.ClearCacheManager;
 import io.keepcoding.madridshops.domain.managers.cache.ClearCacheManagerDAOImpl;
 import io.keepcoding.madridshops.navigator.Navigator;
+import io.keepcoding.madridshops.util.Internet;
 import io.keepcoding.madridshops.util.MainThread;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main__shops_button) Button shopsButton;
     @BindView(R.id.activity_main__activities_button) Button activitiesButton;
+    @BindView(R.id.activity_main__progress_bar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        // shopsButton = (Button) findViewById(R.id.activity_main__shops_button);
 
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +62,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //launchInBackgroundThread();
-        //testMultithread();
+        if (!Internet.isInternetAvailable()) {
+            showWithoutInternetAlert();
+        }
+
+
+    }
+
+    private void showWithoutInternetAlert() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(getString(R.string.without_internet_connection));
+        alert.setCancelable(false);
+        alert.setMessage(getString(R.string.without_internet_connection_message));
+        alert.show();
     }
 
     private void launchInBackgroundThread() {
