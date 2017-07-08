@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (!Internet.isInternetAvailable()) {
             showWithoutInternetAlert();
+        } else {
+            // TODO: Cache data
         }
-
-
     }
 
     private void showWithoutInternetAlert() {
