@@ -11,6 +11,7 @@ public class ClearCacheInteractorImpl implements ClearCacheInteractor {
 
     @Override
     public void execute(Runnable completion) {
+        // TODO: Next time the App is started, if more than 7 days has passed the cache will be invalidated (deleted) and everything will be...
         manager.execute(completion);
     }
 }
