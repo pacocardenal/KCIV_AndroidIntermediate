@@ -102,6 +102,7 @@ public class ActivityListActivity extends AppCompatActivity {
                     map = googleMap;
                     checkCacheData();
                     addDataToMap(googleMap);
+
                 }
             }
         });

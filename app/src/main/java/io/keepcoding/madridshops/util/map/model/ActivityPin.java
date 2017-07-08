@@ -38,7 +38,7 @@ public class ActivityPin implements MapPinnable<Activity> {
 
     @Override
     public String getPinDescription() {
-        return activity.getName();
+        return activity.getName() + " - " + activity.getAddress();
     }
 
     @Override
