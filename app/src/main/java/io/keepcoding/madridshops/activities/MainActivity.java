@@ -22,12 +22,25 @@ import butterknife.OnClick;
 import io.keepcoding.madridshops.R;
 import io.keepcoding.madridshops.domain.interactors.ClearCacheInteractor;
 import io.keepcoding.madridshops.domain.interactors.ClearCacheInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesAreCachedInteractor;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesAreCachedInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
+import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
+import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractor;
+import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractor;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.SetAllShopsAreCachedInteractor;
 import io.keepcoding.madridshops.domain.interactors.SetAllShopsAreCachedInteractorImpl;
 import io.keepcoding.madridshops.domain.managers.cache.ClearCacheManager;
 import io.keepcoding.madridshops.domain.managers.cache.ClearCacheManagerDAOImpl;
+import io.keepcoding.madridshops.domain.managers.cache.SaveAllActivitiesIntoCacheManager;
+import io.keepcoding.madridshops.domain.managers.cache.SaveAllActivitiesIntoCacheManagerDAOImpl;
+import io.keepcoding.madridshops.domain.managers.network.ActivitiesNetworkManager;
+import io.keepcoding.madridshops.domain.managers.network.GetAllActivitiesManagerImpl;
+import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.navigator.Navigator;
 import io.keepcoding.madridshops.util.Internet;
 import io.keepcoding.madridshops.util.MainThread;
@@ -66,7 +79,58 @@ public class MainActivity extends AppCompatActivity {
             showWithoutInternetAlert();
         } else {
             // TODO: Cache data
+            checkCacheData();
         }
+    }
+
+    private void checkCacheData() {
+        GetAllActivitiesAreCachedInteractor getAllActivitiesAreCachedInteractor = new GetAllActivitiesAreCachedInteractorImpl(this);
+        getAllActivitiesAreCachedInteractor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // all cached already, no need to download things, just read from DB
+                // Nothing to do
+                Log.d("a", "Nothing");
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                // nothing cached yet
+                Log.d("a", "Yes");
+                obtainActivitiesList();
+            }
+        });
+    }
+
+    private void obtainActivitiesList() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        ActivitiesNetworkManager manager = new GetAllActivitiesManagerImpl(this);
+        GetAllActivitiesInteractor getAllActivitiesInteractor = new GetAllActivitiesInteractorImpl(manager);
+        getAllActivitiesInteractor.execute(
+                new GetAllActivitiesInteractorCompletion() {
+                    @Override
+                    public void completion(Activities activities) {
+                        SaveAllActivitiesIntoCacheManager saveManager = new SaveAllActivitiesIntoCacheManagerDAOImpl(getBaseContext());
+                        SaveAllActivitiesIntoCacheInteractor saveInteractor = new SaveAllActivitiesIntoCacheInteractorImpl(saveManager);
+                        saveInteractor.execute(activities, new Runnable() {
+                            @Override
+                            public void run() {
+                                SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
+                                setAllActivitiesAreCachedInteractor.execute(true);
+                            }
+                        });
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                },
+                new InteractorErrorCompletion() {
+                    @Override
+                    public void onError(String errorDescription) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
+        );
     }
 
     private void showWithoutInternetAlert() {
