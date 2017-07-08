@@ -65,7 +65,6 @@ public class ActivityListActivity extends AppCompatActivity {
 
         activitiesFragment = (ActivitiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_activity_list__fragment_activities);
 
-        checkCacheData();
         initializeMap();
 
     }
@@ -198,5 +197,16 @@ public class ActivityListActivity extends AppCompatActivity {
     private void putActivityPinsOnMap(Activities activities) {
         List<MapPinnable> activityPins = ActivityPin.activityPinsFromActivities(activities);
         MapUtil.addPins(activityPins, map, this);
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if (marker.getTag() == null || !(marker.getTag() instanceof Activity)) {
+                    return;
+                }
+                Activity activity = (Activity) marker.getTag();
+                Navigator.navigateFromActivityListActivityToActivityDetailActivity(ActivityListActivity.this, activity, 0);
+            }
+        });
     }
 }
