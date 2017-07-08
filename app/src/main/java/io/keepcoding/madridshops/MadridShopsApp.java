@@ -1,18 +1,9 @@
 package io.keepcoding.madridshops;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.support.multidex.MultiDexApplication;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.squareup.picasso.Picasso;
-
-import io.keepcoding.madridshops.activities.ShopListActivity;
-import io.keepcoding.madridshops.services.ShopService;
 
 
 public class MadridShopsApp extends MultiDexApplication {
@@ -30,7 +21,7 @@ public class MadridShopsApp extends MultiDexApplication {
         // Picasso.with(getApplicationContext()).setLoggingEnabled(true);
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(true);
 
-        ShopService.startRunningService(this);
+/*        ShopService.startRunningService(this);
 
         Resources resources = getResources();
         Intent intent = new Intent(this, ShopListActivity.class);
@@ -47,7 +38,7 @@ public class MadridShopsApp extends MultiDexApplication {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         int notificationId = 0;
-        notificationManager.notify(notificationId, notification);
+        notificationManager.notify(notificationId, notification);*/
 
     }
 

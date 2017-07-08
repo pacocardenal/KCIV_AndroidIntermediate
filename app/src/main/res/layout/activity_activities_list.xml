@@ -9,29 +9,63 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="2"
+    android:orientation="vertical"
     tools:context="io.keepcoding.madridshops.activities.ActivityListActivity">
 
-    <fragment
-        android:id="@+id/activity_activity_list__map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
-    </fragment>
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/activity_activity_list__fragment_activities"
-        android:name="io.keepcoding.madridshops.fragments.ActivitiesFragment"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+            <fragment
+                android:id="@+id/activity_activity_list__map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </fragment>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <fragment
+                android:id="@+id/activity_activity_list__fragment_activities"
+                android:name="io.keepcoding.madridshops.fragments.ActivitiesFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_activities"
+                android:layout_below="@id/activity_activity_list__map">
+            </fragment>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        tools:layout="@layout/fragment_activities"
-        android:layout_below="@id/activity_activity_list__map">
-    </fragment>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
 
-    <ProgressBar
-        android:id="@+id/activity_activity_list__progress_bar"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+        <ProgressBar
+            android:id="@+id/activity_activity_list__progress_bar"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>
+
