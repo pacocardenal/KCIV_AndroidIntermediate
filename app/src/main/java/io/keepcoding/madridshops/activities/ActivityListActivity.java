@@ -10,6 +10,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +42,9 @@ import io.keepcoding.madridshops.domain.model.Activities;
 import io.keepcoding.madridshops.domain.model.Activity;
 import io.keepcoding.madridshops.fragments.ActivitiesFragment;
 import io.keepcoding.madridshops.navigator.Navigator;
+import io.keepcoding.madridshops.util.map.MapPinnable;
+import io.keepcoding.madridshops.util.map.MapUtil;
+import io.keepcoding.madridshops.util.map.model.ActivityPin;
 import io.keepcoding.madridshops.views.OnElementClick;
 
 import static io.keepcoding.madridshops.util.map.MapUtil.centerMapInPosition;
@@ -46,6 +55,7 @@ public class ActivityListActivity extends AppCompatActivity {
 
     ActivitiesFragment activitiesFragment;
     private SupportMapFragment mapFragment;
+    public GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,12 @@ public class ActivityListActivity extends AppCompatActivity {
 
         activitiesFragment = (ActivitiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_activity_list__fragment_activities);
 
+        checkCacheData();
+        initializeMap();
+
+    }
+
+    private void checkCacheData() {
         GetAllActivitiesAreCachedInteractor getAllActivitiesAreCachedInteractor = new GetAllActivitiesAreCachedInteractorImpl(this);
         getAllActivitiesAreCachedInteractor.execute(new Runnable() {
             @Override
@@ -69,13 +85,12 @@ public class ActivityListActivity extends AppCompatActivity {
                 obtainActivitiesList();
             }
         });
-
-        initializeMap();
     }
 
     private void initializeMap() {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.activity_activity_list__map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
+
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 // check if map is created successfully or not
@@ -84,14 +99,42 @@ public class ActivityListActivity extends AppCompatActivity {
                             "Sorry! unable to create maps", Toast.LENGTH_SHORT)
                             .show();
                 } else {
-                    setupMap(googleMap);
+                    map = googleMap;
+                    checkCacheData();
+                    addDataToMap(googleMap);
                 }
             }
         });
     }
 
-    public void setupMap(GoogleMap map) {
+    public void addDataToMap(GoogleMap map) {
+
+/*        if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }*/
+
         centerMapInPosition(map, 40.411335, -3.674908);
+        map.getUiSettings().setZoomControlsEnabled(true);
+/*        map.setMyLocationEnabled(true);*/
+
+        MarkerOptions retiroMarkerOptions = new MarkerOptions()
+                .position(new LatLng(40.411335, -3.674908))
+                .title("Hello world").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        MarkerOptions retiroMarkerOptions2 = new MarkerOptions()
+                .position(new LatLng(40.42, -3.674908))
+                .title("Hello world 2").icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_camera));
+
+        Marker marker = map.addMarker(retiroMarkerOptions);
+        Marker marker2 = map.addMarker(retiroMarkerOptions2);
     }
 
     private void readDataFromCache() {
@@ -147,5 +190,12 @@ public class ActivityListActivity extends AppCompatActivity {
                 Navigator.navigateFromActivityListActivityToActivityDetailActivity(ActivityListActivity.this, element, position);
             }
         });
+        
+        putActivityPinsOnMap(activities);
+    }
+
+    private void putActivityPinsOnMap(Activities activities) {
+        List<MapPinnable> activityPins = ActivityPin.activityPinsFromActivities(activities);
+        MapUtil.addPins(activityPins, map, this);
     }
 }
