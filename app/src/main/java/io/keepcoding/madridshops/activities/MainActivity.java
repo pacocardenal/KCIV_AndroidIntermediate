@@ -28,6 +28,8 @@ import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesAreCachedInt
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractor;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorCompletion;
 import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.GetIfReloadCacheInteractor;
+import io.keepcoding.madridshops.domain.interactors.GetIfReloadCacheInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
 import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractor;
 import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractorImpl;
@@ -89,16 +91,28 @@ public class MainActivity extends AppCompatActivity {
         getAllActivitiesAreCachedInteractor.execute(new Runnable() {
             @Override
             public void run() {
-                // all cached already, no need to download things, just read from DB
-                // Nothing to do
-                Log.d("a", "Nothing");
+                // Check the 7 days rule
+                checkIfCacheNeedsToReload();
             }
         }, new Runnable() {
             @Override
             public void run() {
-                // nothing cached yet
-                Log.d("a", "Yes");
                 obtainActivitiesList();
+            }
+        });
+    }
+
+    private void checkIfCacheNeedsToReload() {
+        GetIfReloadCacheInteractor getIfReloadCacheInteractor = new GetIfReloadCacheInteractorImpl(this);
+        getIfReloadCacheInteractor.execute(new Runnable() {
+            @Override
+            public void run() {
+                obtainActivitiesList();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                // Nothing to do
             }
         });
     }

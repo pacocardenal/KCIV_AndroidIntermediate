@@ -12,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +28,8 @@ import io.keepcoding.madridshops.domain.interactors.GetAllActivitiesInteractorIm
 import io.keepcoding.madridshops.domain.interactors.InteractorErrorCompletion;
 import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractor;
 import io.keepcoding.madridshops.domain.interactors.SaveAllActivitiesIntoCacheInteractorImpl;
+import io.keepcoding.madridshops.domain.interactors.SetActualDateCachedInteractor;
+import io.keepcoding.madridshops.domain.interactors.SetActualDateCachedInteractorImpl;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractor;
 import io.keepcoding.madridshops.domain.interactors.SetAllActivitiesAreCachedInteractorImpl;
 import io.keepcoding.madridshops.domain.managers.cache.GetAllActivitiesFromCacheManager;
@@ -161,6 +164,10 @@ public class ActivityListActivity extends AppCompatActivity {
                             public void run() {
                                 SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
                                 setAllActivitiesAreCachedInteractor.execute(true);
+                                SetActualDateCachedInteractor setActualDateCachedInteractor = new SetActualDateCachedInteractorImpl(getBaseContext());
+
+                                Date date = new Date(System.currentTimeMillis());
+                                setActualDateCachedInteractor.execute(date.getTime());
                             }
                         });
 
