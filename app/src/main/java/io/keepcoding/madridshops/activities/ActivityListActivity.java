@@ -10,10 +10,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -125,7 +122,7 @@ public class ActivityListActivity extends AppCompatActivity {
         map.getUiSettings().setZoomControlsEnabled(true);
 /*        map.setMyLocationEnabled(true);*/
 
-        MarkerOptions retiroMarkerOptions = new MarkerOptions()
+/*        MarkerOptions retiroMarkerOptions = new MarkerOptions()
                 .position(new LatLng(40.411335, -3.674908))
                 .title("Hello world").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
@@ -134,7 +131,7 @@ public class ActivityListActivity extends AppCompatActivity {
                 .title("Hello world 2").icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_camera));
 
         Marker marker = map.addMarker(retiroMarkerOptions);
-        Marker marker2 = map.addMarker(retiroMarkerOptions2);
+        Marker marker2 = map.addMarker(retiroMarkerOptions2);*/
     }
 
     private void readDataFromCache() {
