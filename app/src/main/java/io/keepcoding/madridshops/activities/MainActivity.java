@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.activity_main__clear_cache_button) void clearCache() {
+        progressBar.setVisibility(View.VISIBLE);
         ClearCacheManager clearCacheManager = new ClearCacheManagerDAOImpl(this);
         ClearCacheInteractor clearCacheInteractor = new ClearCacheInteractorImpl(clearCacheManager);
         clearCacheInteractor.execute(new Runnable() {
@@ -213,6 +215,10 @@ public class MainActivity extends AppCompatActivity {
                 setAllShopsAreCachedInteractor.execute(false);
                 SetAllActivitiesAreCachedInteractor setAllActivitiesAreCachedInteractor = new SetAllActivitiesAreCachedInteractorImpl(getBaseContext());
                 setAllActivitiesAreCachedInteractor.execute(false);
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(),
+                        "Cache cleared!", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }
